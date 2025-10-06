@@ -1,5 +1,6 @@
 package com.BicycleShop.service.impl;
 
+import com.BicycleShop.mapper.BicycleMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
 import com.BicycleShop.model.entities.Bicycle;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BicycleServiceImpl implements BicycleService {
     private final BicycleRepository bicycleRepository;
+    private final BicycleMapper bicycleMapper;
 
     @Override
     public IamResponse<BicycleDTO> getById(@NotNull Integer id) {
@@ -22,17 +24,7 @@ public class BicycleServiceImpl implements BicycleService {
                 .orElseThrow(() -> new NotFoundException((ApiErrorMessage.BICYCLE_WITH_ID_NOT_FOUND.getMessage(id))));
 
 
-        BicycleDTO bicycleDTO = BicycleDTO.builder()
-                .id(bicycle.getId())
-                .brand(bicycle.getBrand())
-                .type(bicycle.getType())
-                .stock(bicycle.getStock())
-                .price(bicycle.getPrice())
-                .createdAt(bicycle.getCreatedAt())
-                .updatedAt(bicycle.getUpdatedAt())
-                .description(bicycle.getDescription())
-                .imageUrl(bicycle.getImageUrl())
-                .build();
+        BicycleDTO bicycleDTO = bicycleMapper.toBicycleDTO(bicycle);
 
         return IamResponse.createSuccessful(bicycleDTO);
     }
