@@ -7,12 +7,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ApiLogMessage {
-    BICYCLE_INFO_BY_ID("Receeving bicycle with id: %s"),
+    BICYCLE_INFO_BY_ID("Receeving bicycle with id: {}"),
+    NAME_OF_CURRENT_METHOD("Current method: {}"),
     ;
 
-    private String message;
+    private String value;
 
-    public String getMessage(Object... args) {
-        return String.format(message, args);
-    }
+
 }
