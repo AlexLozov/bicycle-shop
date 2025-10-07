@@ -9,6 +9,7 @@ import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.repositories.BicycleRepository;
 import com.BicycleShop.service.BicycleService;
 import com.BicycleShop.utils.ApiUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,8 @@ public class BicycleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<IamResponse<BicycleDTO>> createBicycle(@RequestBody BicycleRequest bicycleRequest) {
+    public ResponseEntity<IamResponse<BicycleDTO>> createBicycle(
+            @RequestBody @Valid BicycleRequest bicycleRequest) {
 
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
         IamResponse<BicycleDTO> response = bicycleService.createBicycle(bicycleRequest);

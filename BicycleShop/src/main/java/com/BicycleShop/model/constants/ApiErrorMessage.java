@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ApiErrorMessage {
     BICYCLE_WITH_ID_NOT_FOUND("Bicycle with ID: %s not found"),
+    BICYCLE_WITH_NAME_ALREADY_EXISTS("Bicycle with name: '%s' already exists"),
     ;
 
     private String message;

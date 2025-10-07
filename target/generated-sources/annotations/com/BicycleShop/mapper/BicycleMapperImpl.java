@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-07T19:15:15+0300",
+    date = "2025-10-07T19:22:11+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -25,6 +25,7 @@ public class BicycleMapperImpl implements BicycleMapper {
         BicycleDTO.BicycleDTOBuilder bicycleDTO = BicycleDTO.builder();
 
         bicycleDTO.id( bicycle.getId() );
+        bicycleDTO.name( bicycle.getName() );
         bicycleDTO.brand( bicycle.getBrand() );
         bicycleDTO.type( bicycle.getType() );
         bicycleDTO.price( bicycle.getPrice() );
@@ -45,6 +46,7 @@ public class BicycleMapperImpl implements BicycleMapper {
 
         Bicycle bicycle = new Bicycle();
 
+        bicycle.setName( bicycleRequest.getName() );
         bicycle.setBrand( bicycleRequest.getBrand() );
         bicycle.setType( bicycleRequest.getType() );
         bicycle.setPrice( bicycleRequest.getPrice() );

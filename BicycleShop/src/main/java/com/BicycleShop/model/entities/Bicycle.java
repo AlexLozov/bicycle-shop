@@ -17,6 +17,9 @@ public class Bicycle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
+    @Column(nullable = false, unique = true)
+    public String name;
+
     @Column(nullable = false)
     public String brand;
 

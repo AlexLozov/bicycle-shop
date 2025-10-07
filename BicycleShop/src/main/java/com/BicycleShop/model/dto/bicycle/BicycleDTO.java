@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BicycleDTO implements Serializable {
     private Integer id;
+    private String name;
     private String brand;
     private String type;
     private Float price;

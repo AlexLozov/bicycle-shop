@@ -19,6 +19,7 @@ public interface BicycleMapper {
 //      - сущность с базы             --дто
 //    @Mapping(source = "id", target = "id")
 //    @Mapping(source = "brand", target = "brand")
+//    @Mapping(source = "name", target = "name")
 //    @Mapping(source = "type", target = "type")
 //    @Mapping(source = "price", target = "price")
 //    @Mapping(source = "stock", target = "stock")
@@ -31,6 +32,7 @@ public interface BicycleMapper {
 
     @Mapping(target = "id", ignore = true)
 //    @Mapping(source = "brand", target = "brand")
+//    @Mapping(source = "name", target = "name")
 //    @Mapping(source = "type", target = "type")
 //    @Mapping(source = "price", target = "price")
 //    @Mapping(source = "stock", target = "stock")

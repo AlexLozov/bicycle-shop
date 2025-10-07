@@ -4,6 +4,7 @@ import com.BicycleShop.mapper.BicycleMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
 import com.BicycleShop.model.entities.Bicycle;
+import com.BicycleShop.model.exception.DataExistException;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.bicycle.BicycleRequest;
 import com.BicycleShop.model.response.IamResponse;
@@ -32,6 +33,10 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public IamResponse<BicycleDTO> createBicycle(@NotNull BicycleRequest bicycleRequest) {
+        if(bicycleRepository.existsByName(bicycleRequest.getName())){
+            throw new DataExistException(ApiErrorMessage.BICYCLE_WITH_NAME_ALREADY_EXISTS.getMessage(bicycleRequest.getName()));
+        }
+
         Bicycle bicycle = bicycleMapper.createBicycle(bicycleRequest);
         Bicycle createdBicycle = bicycleRepository.save(bicycle);
         BicycleDTO bicycleDTO = bicycleMapper.toBicycleDTO(createdBicycle);
