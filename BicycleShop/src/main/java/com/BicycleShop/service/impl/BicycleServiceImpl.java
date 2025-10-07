@@ -5,6 +5,7 @@ import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
 import com.BicycleShop.model.entities.Bicycle;
 import com.BicycleShop.model.exception.NotFoundException;
+import com.BicycleShop.model.request.bicycle.BicycleRequest;
 import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.repositories.BicycleRepository;
 import com.BicycleShop.service.BicycleService;
@@ -25,6 +26,15 @@ public class BicycleServiceImpl implements BicycleService {
 
 
         BicycleDTO bicycleDTO = bicycleMapper.toBicycleDTO(bicycle);
+
+        return IamResponse.createSuccessful(bicycleDTO);
+    }
+
+    @Override
+    public IamResponse<BicycleDTO> createBicycle(@NotNull BicycleRequest bicycleRequest) {
+        Bicycle bicycle = bicycleMapper.createBicycle(bicycleRequest);
+        Bicycle createdBicycle = bicycleRepository.save(bicycle);
+        BicycleDTO bicycleDTO = bicycleMapper.toBicycleDTO(createdBicycle);
 
         return IamResponse.createSuccessful(bicycleDTO);
     }

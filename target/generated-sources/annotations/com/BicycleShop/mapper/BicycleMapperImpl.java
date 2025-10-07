@@ -2,6 +2,7 @@ package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
 import com.BicycleShop.model.entities.Bicycle;
+import com.BicycleShop.model.request.bicycle.BicycleRequest;
 import java.util.Objects;
 import javax.annotation.processing.Generated;
 import org.hibernate.type.descriptor.DateTimeUtils;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-06T21:33:29+0300",
+    date = "2025-10-07T19:15:15+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,5 +35,23 @@ public class BicycleMapperImpl implements BicycleMapper {
         bicycleDTO.updatedAt( bicycle.getUpdatedAt() );
 
         return bicycleDTO.build();
+    }
+
+    @Override
+    public Bicycle createBicycle(BicycleRequest bicycleRequest) {
+        if ( bicycleRequest == null ) {
+            return null;
+        }
+
+        Bicycle bicycle = new Bicycle();
+
+        bicycle.setBrand( bicycleRequest.getBrand() );
+        bicycle.setType( bicycleRequest.getType() );
+        bicycle.setPrice( bicycleRequest.getPrice() );
+        bicycle.setStock( bicycleRequest.getStock() );
+        bicycle.setDescription( bicycleRequest.getDescription() );
+        bicycle.setImageUrl( bicycleRequest.getImageUrl() );
+
+        return bicycle;
     }
 }
