@@ -25,7 +25,7 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public IamResponse<BicycleDTO> getById(@NotNull Integer id) {
-        Bicycle bicycle = bicycleRepository.findById(id)
+        Bicycle bicycle = bicycleRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException((ApiErrorMessage.BICYCLE_WITH_ID_NOT_FOUND.getMessage(id))));
 
 
@@ -49,7 +49,7 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public IamResponse<BicycleDTO> updateBicycle(@NotNull Integer id,@NotNull UpdateBicycleRequest request) {
-        Bicycle bicycle = bicycleRepository.findById(id)
+        Bicycle bicycle = bicycleRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException((ApiErrorMessage.BICYCLE_WITH_ID_NOT_FOUND.getMessage(id))));
 
         bicycleMapper.updateBicycle(bicycle, request);
@@ -59,4 +59,15 @@ public class BicycleServiceImpl implements BicycleService {
         BicycleDTO bicycleDTO = bicycleMapper.toBicycleDTO(bicycle);
         return IamResponse.createSuccessful(bicycleDTO);
     }
+
+
+    @Override
+    public void softDeleteBicycle(Integer id) {
+        Bicycle bicycle = bicycleRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException((ApiErrorMessage.BICYCLE_WITH_ID_NOT_FOUND.getMessage(id))));
+
+        bicycle.setDeleted(true);
+        bicycleRepository.save(bicycle);
+    }
+
 }

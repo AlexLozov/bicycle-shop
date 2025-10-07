@@ -12,4 +12,5 @@ public interface BicycleService {
     IamResponse<BicycleDTO> getById(@NotNull Integer id);
     IamResponse<BicycleDTO> createBicycle(@NotNull NewBicycleRequest newBicycleRequest);
     IamResponse<BicycleDTO> updateBicycle(@NotNull Integer id, @NotNull UpdateBicycleRequest updateBicycleRequest);
+    void softDeleteBicycle(@NotNull Integer id);
 }

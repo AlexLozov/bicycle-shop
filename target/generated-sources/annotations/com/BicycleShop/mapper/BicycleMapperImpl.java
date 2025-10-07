@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-07T20:30:04+0300",
+    date = "2025-10-07T20:58:58+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,7 +34,6 @@ public class BicycleMapperImpl implements BicycleMapper {
         bicycleDTO.description( bicycle.getDescription() );
         bicycleDTO.imageUrl( bicycle.getImageUrl() );
         bicycleDTO.createdAt( bicycle.getCreatedAt() );
-        bicycleDTO.updatedAt( bicycle.getUpdatedAt() );
 
         return bicycleDTO.build();
     }
@@ -59,9 +58,9 @@ public class BicycleMapperImpl implements BicycleMapper {
     }
 
     @Override
-    public Bicycle updateBicycle(Bicycle bicycle, UpdateBicycleRequest request) {
+    public void updateBicycle(Bicycle bicycle, UpdateBicycleRequest request) {
         if ( request == null ) {
-            return bicycle;
+            return;
         }
 
         if ( request.getName() != null ) {
@@ -85,7 +84,5 @@ public class BicycleMapperImpl implements BicycleMapper {
         if ( request.getImageUrl() != null ) {
             bicycle.setImageUrl( request.getImageUrl() );
         }
-
-        return bicycle;
     }
 }

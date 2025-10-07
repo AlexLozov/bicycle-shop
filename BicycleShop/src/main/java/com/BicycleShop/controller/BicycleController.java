@@ -49,4 +49,14 @@ public class BicycleController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> softDeleteBicycleById(
+            @PathVariable(name = "id") Integer id) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        bicycleService.softDeleteBicycle(id);
+        return ResponseEntity.ok().build();
+
+    }
+
 }

@@ -44,5 +44,8 @@ public class Bicycle {
     @Column(name = "updated_at", nullable = false)
     public LocalDateTime updatedAt = LocalDateTime.now();
 
+    @Column(nullable = false)
+    public boolean deleted = false;
+
 
 }

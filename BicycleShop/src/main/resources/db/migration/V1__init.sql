@@ -8,7 +8,8 @@ CREATE TABLE bicycles (
                           description VARCHAR(500),
                           image_url TEXT,
                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- дата добавления
-                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- дата добавления
+                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- дата добавления
+                          deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 
