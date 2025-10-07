@@ -1,12 +1,10 @@
 package com.BicycleShop.controller;
 
-import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.constants.ApiLogMessage;
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
-import com.BicycleShop.model.entities.Bicycle;
-import com.BicycleShop.model.request.bicycle.BicycleRequest;
+import com.BicycleShop.model.request.bicycle.NewBicycleRequest;
+import com.BicycleShop.model.request.bicycle.UpdateBicycleRequest;
 import com.BicycleShop.model.response.IamResponse;
-import com.BicycleShop.repositories.BicycleRepository;
 import com.BicycleShop.service.BicycleService;
 import com.BicycleShop.utils.ApiUtils;
 import jakarta.validation.Valid;
@@ -33,10 +31,21 @@ public class BicycleController {
 
     @PostMapping("/create")
     public ResponseEntity<IamResponse<BicycleDTO>> createBicycle(
-            @RequestBody @Valid BicycleRequest bicycleRequest) {
+            @RequestBody @Valid NewBicycleRequest newBicycleRequest) {
 
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
-        IamResponse<BicycleDTO> response = bicycleService.createBicycle(bicycleRequest);
+        IamResponse<BicycleDTO> response = bicycleService.createBicycle(newBicycleRequest);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<IamResponse<BicycleDTO>> updateBicycle(
+            @PathVariable(name="id") Integer id,
+                    @RequestBody @Valid UpdateBicycleRequest request){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<BicycleDTO> response = bicycleService.updateBicycle(id, request);
         return ResponseEntity.ok(response);
     }
 

@@ -22,5 +22,4 @@ public class BicycleDTO implements Serializable {
     private String description;
     private String imageUrl;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

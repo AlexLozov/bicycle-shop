@@ -1,6 +1,5 @@
 package com.BicycleShop.model.request.bicycle;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BicycleRequest implements Serializable {
+public class UpdateBicycleRequest implements Serializable {
     @NotBlank(message = "name cannot be empty")
     private String name;
 

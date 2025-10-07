@@ -2,7 +2,8 @@ package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
 import com.BicycleShop.model.entities.Bicycle;
-import com.BicycleShop.model.request.bicycle.BicycleRequest;
+import com.BicycleShop.model.request.bicycle.NewBicycleRequest;
+import com.BicycleShop.model.request.bicycle.UpdateBicycleRequest;
 import java.util.Objects;
 import javax.annotation.processing.Generated;
 import org.hibernate.type.descriptor.DateTimeUtils;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-07T19:22:11+0300",
+    date = "2025-10-07T20:30:04+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -39,20 +40,51 @@ public class BicycleMapperImpl implements BicycleMapper {
     }
 
     @Override
-    public Bicycle createBicycle(BicycleRequest bicycleRequest) {
-        if ( bicycleRequest == null ) {
+    public Bicycle createBicycle(NewBicycleRequest newBicycleRequest) {
+        if ( newBicycleRequest == null ) {
             return null;
         }
 
         Bicycle bicycle = new Bicycle();
 
-        bicycle.setName( bicycleRequest.getName() );
-        bicycle.setBrand( bicycleRequest.getBrand() );
-        bicycle.setType( bicycleRequest.getType() );
-        bicycle.setPrice( bicycleRequest.getPrice() );
-        bicycle.setStock( bicycleRequest.getStock() );
-        bicycle.setDescription( bicycleRequest.getDescription() );
-        bicycle.setImageUrl( bicycleRequest.getImageUrl() );
+        bicycle.setName( newBicycleRequest.getName() );
+        bicycle.setBrand( newBicycleRequest.getBrand() );
+        bicycle.setType( newBicycleRequest.getType() );
+        bicycle.setPrice( newBicycleRequest.getPrice() );
+        bicycle.setStock( newBicycleRequest.getStock() );
+        bicycle.setDescription( newBicycleRequest.getDescription() );
+        bicycle.setImageUrl( newBicycleRequest.getImageUrl() );
+
+        return bicycle;
+    }
+
+    @Override
+    public Bicycle updateBicycle(Bicycle bicycle, UpdateBicycleRequest request) {
+        if ( request == null ) {
+            return bicycle;
+        }
+
+        if ( request.getName() != null ) {
+            bicycle.setName( request.getName() );
+        }
+        if ( request.getBrand() != null ) {
+            bicycle.setBrand( request.getBrand() );
+        }
+        if ( request.getType() != null ) {
+            bicycle.setType( request.getType() );
+        }
+        if ( request.getPrice() != null ) {
+            bicycle.setPrice( request.getPrice() );
+        }
+        if ( request.getStock() != null ) {
+            bicycle.setStock( request.getStock() );
+        }
+        if ( request.getDescription() != null ) {
+            bicycle.setDescription( request.getDescription() );
+        }
+        if ( request.getImageUrl() != null ) {
+            bicycle.setImageUrl( request.getImageUrl() );
+        }
 
         return bicycle;
     }
