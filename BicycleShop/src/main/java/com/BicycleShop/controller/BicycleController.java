@@ -3,6 +3,7 @@ package com.BicycleShop.controller;
 import com.BicycleShop.model.constants.ApiLogMessage;
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
 import com.BicycleShop.model.dto.bicycle.BicycleSearchDTO;
+import com.BicycleShop.model.request.bicycle.BicycleSearchRequest;
 import com.BicycleShop.model.request.bicycle.NewBicycleRequest;
 import com.BicycleShop.model.request.bicycle.UpdateBicycleRequest;
 import com.BicycleShop.model.response.IamResponse;
@@ -75,5 +76,21 @@ public class BicycleController {
         IamResponse<PaginationResponse<BicycleSearchDTO>> response = bicycleService.findAllBicycles(pageable);
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/search")
+    public ResponseEntity<IamResponse<PaginationResponse<BicycleSearchDTO>>> searchBicycles(
+            @RequestBody @Valid BicycleSearchRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "limit", defaultValue = "3") int limit
+    ){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        Pageable pageable = PageRequest.of(page, limit);
+        IamResponse<PaginationResponse<BicycleSearchDTO>> response = bicycleService.searchBicycles(request, pageable);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

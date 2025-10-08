@@ -12,6 +12,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Bicycle {
+    public static final String ID_FIELD = "id";
+    public static final String NAME_FIELD = "name";
+    public static final String PRICE_FIELD = "price";
+    public static final String DELETED_FIELD = "deleted";
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
