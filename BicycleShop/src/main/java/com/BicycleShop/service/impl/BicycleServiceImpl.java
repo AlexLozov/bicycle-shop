@@ -3,16 +3,20 @@ package com.BicycleShop.service.impl;
 import com.BicycleShop.mapper.BicycleMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
+import com.BicycleShop.model.dto.bicycle.BicycleSearchDTO;
 import com.BicycleShop.model.entities.Bicycle;
 import com.BicycleShop.model.exception.DataExistException;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.bicycle.NewBicycleRequest;
 import com.BicycleShop.model.request.bicycle.UpdateBicycleRequest;
 import com.BicycleShop.model.response.IamResponse;
+import com.BicycleShop.model.response.PaginationResponse;
 import com.BicycleShop.repositories.BicycleRepository;
 import com.BicycleShop.service.BicycleService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -68,6 +72,24 @@ public class BicycleServiceImpl implements BicycleService {
 
         bicycle.setDeleted(true);
         bicycleRepository.save(bicycle);
+    }
+
+    @Override
+    public IamResponse<PaginationResponse<BicycleSearchDTO>> findAllBicycles(Pageable pageable) {
+        Page<BicycleSearchDTO> bicycles = bicycleRepository.findAll(pageable)
+                .map(bicycleMapper::toBicycleSearchDTO);
+
+        PaginationResponse<BicycleSearchDTO> response = new PaginationResponse<>(
+                bicycles.getContent(),
+                new PaginationResponse.Pagination(
+                        pageable.getPageSize(),
+                        bicycles.getTotalPages(),
+                        bicycles.getNumber() + 1,
+                        bicycles.getTotalElements()
+
+                )
+        );
+        return IamResponse.createSuccessful(response);
     }
 
 }

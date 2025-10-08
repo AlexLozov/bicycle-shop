@@ -1,6 +1,7 @@
 package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
+import com.BicycleShop.model.dto.bicycle.BicycleSearchDTO;
 import com.BicycleShop.model.entities.Bicycle;
 import com.BicycleShop.model.request.bicycle.NewBicycleRequest;
 import com.BicycleShop.model.request.bicycle.UpdateBicycleRequest;
@@ -57,6 +58,10 @@ public interface BicycleMapper {
     @Mapping(target = "updatedAt", ignore = true)
     // @MappingTarget - переданный Bicycle должен быть обновлен, а не заменен новым
     void updateBicycle(@MappingTarget Bicycle bicycle, UpdateBicycleRequest request);
+
+   // @Mapping(source = "deleted", target = "isDeleted")
+    BicycleSearchDTO toBicycleSearchDTO(Bicycle bicycle);
+
 
 
 

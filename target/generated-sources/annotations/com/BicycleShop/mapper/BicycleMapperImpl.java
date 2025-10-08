@@ -1,6 +1,7 @@
 package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.bicycle.BicycleDTO;
+import com.BicycleShop.model.dto.bicycle.BicycleSearchDTO;
 import com.BicycleShop.model.entities.Bicycle;
 import com.BicycleShop.model.request.bicycle.NewBicycleRequest;
 import com.BicycleShop.model.request.bicycle.UpdateBicycleRequest;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-07T20:58:58+0300",
+    date = "2025-10-08T12:36:17+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -84,5 +85,27 @@ public class BicycleMapperImpl implements BicycleMapper {
         if ( request.getImageUrl() != null ) {
             bicycle.setImageUrl( request.getImageUrl() );
         }
+    }
+
+    @Override
+    public BicycleSearchDTO toBicycleSearchDTO(Bicycle bicycle) {
+        if ( bicycle == null ) {
+            return null;
+        }
+
+        BicycleSearchDTO bicycleSearchDTO = new BicycleSearchDTO();
+
+        bicycleSearchDTO.setId( bicycle.getId() );
+        bicycleSearchDTO.setName( bicycle.getName() );
+        bicycleSearchDTO.setBrand( bicycle.getBrand() );
+        bicycleSearchDTO.setType( bicycle.getType() );
+        bicycleSearchDTO.setPrice( bicycle.getPrice() );
+        bicycleSearchDTO.setStock( bicycle.getStock() );
+        bicycleSearchDTO.setDescription( bicycle.getDescription() );
+        bicycleSearchDTO.setImageUrl( bicycle.getImageUrl() );
+        bicycleSearchDTO.setCreatedAt( bicycle.getCreatedAt() );
+        bicycleSearchDTO.setDeleted( bicycle.isDeleted() );
+
+        return bicycleSearchDTO;
     }
 }

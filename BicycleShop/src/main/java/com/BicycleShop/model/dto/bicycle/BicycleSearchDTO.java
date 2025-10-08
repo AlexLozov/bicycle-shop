@@ -1,7 +1,6 @@
 package com.BicycleShop.model.dto.bicycle;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,10 +8,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BicycleDTO implements Serializable {
+public class BicycleSearchDTO implements Serializable {
     private Integer id;
     private String name;
     private String brand;
@@ -22,5 +20,6 @@ public class BicycleDTO implements Serializable {
     private String description;
     private String imageUrl;
     private LocalDateTime createdAt;
+    private boolean deleted;
 
 }
