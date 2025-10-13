@@ -3,6 +3,7 @@ package com.BicycleShop.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "bicycles")
 @Getter
 @Setter
+//@NoArgsConstructor
 public class Bicycle {
     public static final String ID_FIELD = "id";
     public static final String NAME_FIELD = "name";

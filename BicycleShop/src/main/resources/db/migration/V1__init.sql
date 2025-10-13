@@ -1,3 +1,17 @@
+CREATE TABLE users(
+                        id BIGSERIAL PRIMARY KEY ,
+                        username VARCHAR(30) NOT NULL UNIQUE ,
+                        password VARCHAR(80) NOT NULL,
+                        email VARCHAR(50) NOT NULL UNIQUE ,
+                        created TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- дата добавления
+                        updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- дата добавления
+                        registration_status VARCHAR(30) NOT NULL ,
+                        last_login TIMESTAMP,
+                        deleted BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+
+
 CREATE TABLE bicycles (
                           id SERIAL PRIMARY KEY,           -- уникальный идентификатор
                           name VARCHAR(30) NOT NULL UNIQUE,
@@ -11,6 +25,15 @@ CREATE TABLE bicycles (
                           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- дата добавления
                           deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+
+INSERT INTO users(username, password, email, created, updated, registration_status, last_login, deleted)
+VALUES
+    ('fisrt', 'password1', 'first@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
+    ('two', 'password2', 'two@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
+    ('three', 'password3', 'three@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false);
+
+
 
 
 INSERT INTO bicycles (name, brand, type, price, stock, description, image_url)
