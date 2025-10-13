@@ -1,6 +1,9 @@
 package com.BicycleShop.mapper;
 
+import com.BicycleShop.model.dto.cart_item.CartItemDTO;
+import com.BicycleShop.model.dto.shopping_cart.ShoppingCartDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import com.BicycleShop.model.request.user.NewUserRequest;
@@ -19,7 +22,38 @@ import java.util.Objects;
 public interface UserMapper {
 
     @Mapping(source = "last_login", target = "lastLogin")
+    @Mapping(target = "shoppingCart", expression = "java(mapShoppingCart(user.getShoppingCart()))")
     UserDTO toDTO(User user);
+
+    // --- метод для маппинга корзины ---
+    default ShoppingCartDTO mapShoppingCart(ShoppingCart cart) {
+        if (cart == null) return null;
+
+        ShoppingCartDTO cartDTO = new ShoppingCartDTO();
+        cartDTO.setId(cart.getId());
+
+        cartDTO.setItems(
+                cart.getItems().stream().map(item -> {
+                    CartItemDTO itemDTO = new CartItemDTO();
+                    itemDTO.setId(item.getId());
+                    itemDTO.setName(item.getBicycle().getName());
+                    itemDTO.setBrand(item.getBicycle().getBrand());
+                    itemDTO.setType(item.getBicycle().getType());
+                    itemDTO.setPrice(item.getBicycle().getPrice().floatValue());
+                    itemDTO.setDescription(item.getBicycle().getDescription());
+                    itemDTO.setImageUrl(item.getBicycle().getImageUrl());
+                    itemDTO.setQuantity(item.getQuantity());
+                    return itemDTO;
+                }).toList()
+        );
+
+        return cartDTO;
+    }
+
+
+
+
+
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "created", ignore = true)

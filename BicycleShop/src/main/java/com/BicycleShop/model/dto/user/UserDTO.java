@@ -1,5 +1,6 @@
 package com.BicycleShop.model.dto.user;
 
+import com.BicycleShop.model.dto.shopping_cart.ShoppingCartDTO;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class UserDTO implements Serializable {
 
     private RegistrationStatus registrationStatus;
 
+    private ShoppingCartDTO shoppingCart;
 
 }

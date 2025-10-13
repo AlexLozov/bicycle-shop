@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-13T19:22:58+0300",
+    date = "2025-10-13T22:23:43+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +29,8 @@ public class UserMapperImpl implements UserMapper {
         userDTO.setEmail( user.getEmail() );
         userDTO.setCreated( user.getCreated() );
         userDTO.setRegistrationStatus( user.getRegistrationStatus() );
+
+        userDTO.setShoppingCart( mapShoppingCart(user.getShoppingCart()) );
 
         return userDTO;
     }

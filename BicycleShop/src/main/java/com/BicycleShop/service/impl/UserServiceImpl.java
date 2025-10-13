@@ -3,11 +3,13 @@ package com.BicycleShop.service.impl;
 import com.BicycleShop.mapper.UserMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.exception.DataExistException;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.user.NewUserRequest;
 import com.BicycleShop.model.response.IamResponse;
+import com.BicycleShop.repositories.ShoppingCartRepository;
 import com.BicycleShop.repositories.UserRepository;
 import com.BicycleShop.service.UserService;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final UserMapper userMapper;
 
     @Override
@@ -41,6 +44,11 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.createUser(newUserRequest);
         User savedUser = userRepository.save(user);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(savedUser);
+        shoppingCartRepository.save(cart);
+
         UserDTO userDTO = userMapper.toDTO(savedUser);
 
         return IamResponse.createSuccessful(userDTO);
