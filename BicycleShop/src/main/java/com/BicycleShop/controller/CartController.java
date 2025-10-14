@@ -21,12 +21,36 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
     private final ShoppingCartService shoppingCartService;
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<IamResponse<ShoppingCartDTO>> getCartByUserId(
+            @PathVariable(name = "userId") Integer userId){
+
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<ShoppingCartDTO> response = shoppingCartService.getCartByUserId(userId);
+        return ResponseEntity.ok(response);
+    }
+
+
+
     @PostMapping("/add")
-    public ResponseEntity<IamResponse<ShoppingCartDTO>> addToCart(@Valid @RequestBody AddToShoppingCart request) {
+    public ResponseEntity<IamResponse<ShoppingCartDTO>> addToCart(
+            @Valid @RequestBody AddToShoppingCart request) {
+
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
         IamResponse<ShoppingCartDTO> response = shoppingCartService.addToCart(request);
         return ResponseEntity.ok(response);
+    }
+
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteCartByUserId(
+            @PathVariable(name = "userId") Integer userId){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        shoppingCartService.clearCartByUserId(userId);
+        return ResponseEntity.noContent().build();
     }
 
 }

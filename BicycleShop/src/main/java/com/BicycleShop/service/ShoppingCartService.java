@@ -7,5 +7,8 @@ import jakarta.validation.constraints.NotNull;
 
 public interface ShoppingCartService {
 
-    public IamResponse<ShoppingCartDTO> addToCart(@NotNull AddToShoppingCart request);
+    IamResponse<ShoppingCartDTO> addToCart(@NotNull AddToShoppingCart request);
+    IamResponse<ShoppingCartDTO> getCartByUserId(@NotNull Integer userId);
+    void clearCartByUserId(@NotNull Integer userId);
+
 }

@@ -24,7 +24,7 @@ public class ShoppingCart {
     @Column(nullable = false)
     private LocalDateTime updated = LocalDateTime.now();
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 

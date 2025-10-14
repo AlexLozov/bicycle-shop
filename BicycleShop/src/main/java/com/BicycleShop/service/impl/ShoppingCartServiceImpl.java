@@ -42,11 +42,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         // - проверка есть ли у пользователя корзина
         ShoppingCart cart = user.getShoppingCart();
         if(cart == null) {
-            cart = new ShoppingCart(); // - если нету, то создаем и присваиваем пользователю
-            cart.setUser(user); // - привязываем текущего пользователя к корзине
-            user.setShoppingCart(cart);  // - привязываем созданную корзину к текущему пользователю
-            shoppingCartRepository.save(cart);// - сохраняем ее в базу данных
-            userRepository.save(user); // - сохраняем измененного пользователя в базу данных
+            throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(user.getId()));
+//            cart = new ShoppingCart(); // - если нету, то создаем и присваиваем пользователю
+//            cart.setUser(user); // - привязываем текущего пользователя к корзине
+//            user.setShoppingCart(cart);  // - привязываем созданную корзину к текущему пользователю
+//            shoppingCartRepository.save(cart);// - сохраняем ее в базу данных
+//            userRepository.save(user); // - сохраняем измененного пользователя в базу данных
         }
 
         // - проверяем есть ли уже этот велик в корзине
@@ -72,5 +73,42 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         ShoppingCartDTO response = shoppingCartMapper.toShoppingCartDTO(cart);
         return IamResponse.createSuccessful(response);
+    }
+
+
+
+    @Override
+    public IamResponse<ShoppingCartDTO> getCartByUserId(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
+
+
+        ShoppingCart cart = user.getShoppingCart();
+        // - проверка не нужна - но это для уверенности
+        if(cart == null) {
+            throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(userId));
+            // - проверка не нужна так как пользователь сразу создается с корзиной
+//            cart = new ShoppingCart();
+//            cart.setUser(user);
+//            user.setShoppingCart(cart);
+//            shoppingCartRepository.save(cart);
+//            userRepository.save(user);
+        }
+
+        ShoppingCartDTO response = shoppingCartMapper.toShoppingCartDTO(cart);
+
+        return IamResponse.createSuccessful(response);
+    }
+
+    @Override
+    public void clearCartByUserId(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
+
+        ShoppingCart cart = user.getShoppingCart();
+        if(cart == null) throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(userId));
+
+        cart.getItems().clear();
+        shoppingCartRepository.save(cart);
     }
 }

@@ -14,6 +14,8 @@ public enum ApiErrorMessage {
     USER_WITH_NAME_ALREADY_EXISTS("User with name: '%s' already exists"),
     USER_WITH_EMAIL_ALREADY_EXISTS("User with email: '%s' already exists"),
 
+    CART_WITH_USER_ID_NOT_FOUND("Cart with user ID: %s not found"),
+
     ;
 
     private String message;

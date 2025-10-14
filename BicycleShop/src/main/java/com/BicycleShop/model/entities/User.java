@@ -46,7 +46,7 @@ public class User {
     @Column(nullable = false, name = "registration_status")
     private RegistrationStatus registrationStatus;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ShoppingCart shoppingCart;
 
 

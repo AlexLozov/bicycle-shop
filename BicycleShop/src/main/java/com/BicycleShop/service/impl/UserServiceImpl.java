@@ -43,13 +43,14 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userMapper.createUser(newUserRequest);
-        User savedUser = userRepository.save(user);
 
         ShoppingCart cart = new ShoppingCart();
-        cart.setUser(savedUser);
-        shoppingCartRepository.save(cart);
+        cart.setUser(user);
+        user.setShoppingCart(cart);
 
-        UserDTO userDTO = userMapper.toDTO(savedUser);
+        userRepository.save(user);
+
+        UserDTO userDTO = userMapper.toDTO(user);
 
         return IamResponse.createSuccessful(userDTO);
 
