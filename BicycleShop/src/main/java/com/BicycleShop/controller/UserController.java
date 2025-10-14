@@ -1,6 +1,7 @@
 package com.BicycleShop.controller;
 
 import com.BicycleShop.model.constants.ApiLogMessage;
+import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
 import com.BicycleShop.model.request.user.NewUserRequest;
 import com.BicycleShop.model.response.IamResponse;
@@ -21,11 +22,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<IamResponse<UserDTO>> getUserById(@PathVariable("id") Integer id) {
+    @GetMapping("/full/{id}")
+    public ResponseEntity<IamResponse<FullUserDTO>> getFullUserById(@PathVariable("id") Integer id) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
-        IamResponse<UserDTO> response = userService.getById(id);
+        IamResponse<FullUserDTO> response = userService.getFullUserById(id);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<IamResponse<UserDTO>> getUserById(
+            @PathVariable(name = "id") Integer id){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<UserDTO> response = userService.getUserById(id);
         return ResponseEntity.ok(response);
     }
 

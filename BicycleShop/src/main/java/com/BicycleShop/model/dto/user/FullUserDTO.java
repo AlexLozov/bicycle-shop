@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO implements Serializable {
+public class FullUserDTO implements Serializable {
     private Integer id;
     private String username;
     private String email;
@@ -20,4 +20,6 @@ public class UserDTO implements Serializable {
     private LocalDateTime lastLogin;
 
     private RegistrationStatus registrationStatus;
+
+    private ShoppingCartDTO shoppingCart;
 }

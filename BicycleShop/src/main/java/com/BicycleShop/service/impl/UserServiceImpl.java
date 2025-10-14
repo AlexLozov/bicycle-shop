@@ -2,6 +2,7 @@ package com.BicycleShop.service.impl;
 
 import com.BicycleShop.mapper.UserMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
+import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
 import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
@@ -24,12 +25,12 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public IamResponse<UserDTO> getById(@NotNull Integer id) {
+    public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
 
-        UserDTO userDTO = userMapper.toDTO(user);
-        return IamResponse.createSuccessful(userDTO);
+        FullUserDTO fullUserDTO = userMapper.toFullDTO(user);
+        return IamResponse.createSuccessful(fullUserDTO);
     }
 
     @Override
@@ -54,5 +55,16 @@ public class UserServiceImpl implements UserService {
 
         return IamResponse.createSuccessful(userDTO);
 
+    }
+
+
+
+    @Override
+    public IamResponse<UserDTO> getUserById(@NotNull Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
+
+        UserDTO userDTO = userMapper.toDTO(user);
+        return IamResponse.createSuccessful(userDTO);
     }
 }

@@ -2,6 +2,7 @@ package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.cart_item.CartItemDTO;
 import com.BicycleShop.model.dto.shopping_cart.ShoppingCartDTO;
+import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
 import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
@@ -23,7 +24,7 @@ public interface UserMapper {
 
     @Mapping(source = "last_login", target = "lastLogin")
     @Mapping(target = "shoppingCart", expression = "java(mapShoppingCart(user.getShoppingCart()))")
-    UserDTO toDTO(User user);
+    FullUserDTO toFullDTO(User user);
 
     // --- метод для маппинга корзины ---
     default ShoppingCartDTO mapShoppingCart(ShoppingCart cart) {
@@ -52,6 +53,8 @@ public interface UserMapper {
 
 
 
+    @Mapping(source = "last_login", target = "lastLogin")
+    UserDTO toDTO(User user);
 
 
 

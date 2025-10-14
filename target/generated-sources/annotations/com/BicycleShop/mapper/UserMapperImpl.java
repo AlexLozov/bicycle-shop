@@ -1,5 +1,6 @@
 package com.BicycleShop.mapper;
 
+import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
@@ -9,11 +10,31 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-13T22:23:43+0300",
+    date = "2025-10-14T14:16:46+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
+
+    @Override
+    public FullUserDTO toFullDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        FullUserDTO fullUserDTO = new FullUserDTO();
+
+        fullUserDTO.setLastLogin( user.getLast_login() );
+        fullUserDTO.setId( user.getId() );
+        fullUserDTO.setUsername( user.getUsername() );
+        fullUserDTO.setEmail( user.getEmail() );
+        fullUserDTO.setCreated( user.getCreated() );
+        fullUserDTO.setRegistrationStatus( user.getRegistrationStatus() );
+
+        fullUserDTO.setShoppingCart( mapShoppingCart(user.getShoppingCart()) );
+
+        return fullUserDTO;
+    }
 
     @Override
     public UserDTO toDTO(User user) {
@@ -29,8 +50,6 @@ public class UserMapperImpl implements UserMapper {
         userDTO.setEmail( user.getEmail() );
         userDTO.setCreated( user.getCreated() );
         userDTO.setRegistrationStatus( user.getRegistrationStatus() );
-
-        userDTO.setShoppingCart( mapShoppingCart(user.getShoppingCart()) );
 
         return userDTO;
     }
