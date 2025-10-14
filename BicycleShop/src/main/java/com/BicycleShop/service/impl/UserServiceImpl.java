@@ -17,6 +17,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userMapper.createUser(newUserRequest);
+        user.setLast_login(LocalDateTime.now());
 
         ShoppingCart cart = new ShoppingCart();
         cart.setUser(user);
@@ -66,5 +69,15 @@ public class UserServiceImpl implements UserService {
 
         UserDTO userDTO = userMapper.toDTO(user);
         return IamResponse.createSuccessful(userDTO);
+    }
+
+
+    @Override
+    public void softDeleteUserById(Integer id) {
+        User user = userRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
+
+        user.setDeleted(true);
+        userRepository.save(user);
     }
 }
