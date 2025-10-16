@@ -2,6 +2,7 @@ package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.dto.user.UserSearchDTO;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import com.BicycleShop.model.request.user.NewUserRequest;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-14T14:16:46+0300",
+    date = "2025-10-16T15:55:49+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -69,5 +70,26 @@ public class UserMapperImpl implements UserMapper {
         user.setRegistrationStatus( RegistrationStatus.ACTIVE );
 
         return user;
+    }
+
+    @Override
+    public UserSearchDTO toUserSearchDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserSearchDTO userSearchDTO = new UserSearchDTO();
+
+        userSearchDTO.setId( user.getId() );
+        userSearchDTO.setUsername( user.getUsername() );
+        userSearchDTO.setPassword( user.getPassword() );
+        userSearchDTO.setEmail( user.getEmail() );
+        userSearchDTO.setCreated( user.getCreated() );
+        userSearchDTO.setUpdated( user.getUpdated() );
+        userSearchDTO.setLast_login( user.getLast_login() );
+        userSearchDTO.setDeleted( user.getDeleted() );
+        userSearchDTO.setRegistrationStatus( user.getRegistrationStatus() );
+
+        return userSearchDTO;
     }
 }

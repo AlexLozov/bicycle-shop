@@ -4,16 +4,15 @@ import com.BicycleShop.model.dto.cart_item.CartItemDTO;
 import com.BicycleShop.model.dto.shopping_cart.ShoppingCartDTO;
 import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.dto.user.UserSearchDTO;
 import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import com.BicycleShop.model.request.user.NewUserRequest;
-import org.hibernate.type.descriptor.DateTimeUtils;
+import com.BicycleShop.model.request.user.UserSearchRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-
-import java.util.Objects;
 
 @Mapper(
         componentModel = "spring",
@@ -63,5 +62,7 @@ public interface UserMapper {
     @Mapping(target = "registrationStatus", expression = "java(RegistrationStatus.ACTIVE)")
     User createUser(NewUserRequest newUserRequest);
 
+
+    UserSearchDTO toUserSearchDTO(User user);
 
 }

@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class User {
+    public static final String ID_FIELD = "id";
+    public static final String USERNAME_FIELD = "username";
+    public static final String EMAIL_FIELD = "email";
+    public static final String DELETED_FIELD = "deleted";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

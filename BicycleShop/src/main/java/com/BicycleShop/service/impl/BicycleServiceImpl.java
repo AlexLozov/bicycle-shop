@@ -103,6 +103,7 @@ public class BicycleServiceImpl implements BicycleService {
             Pageable pageable) {
 
         Specification<Bicycle> specification = new BicycleSearchCriteria(request);
+
         Page<BicycleSearchDTO> bicycles = bicycleRepository.findAll(specification, pageable)
                 .map(bicycleMapper::toBicycleSearchDTO);
 

@@ -20,7 +20,6 @@ public class Bicycle {
     public static final String DELETED_FIELD = "deleted";
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;

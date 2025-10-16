@@ -2,19 +2,27 @@ package com.BicycleShop.service.impl;
 
 import com.BicycleShop.mapper.UserMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
+import com.BicycleShop.model.dto.bicycle.BicycleSearchDTO;
 import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.dto.user.UserSearchDTO;
 import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.exception.DataExistException;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.user.NewUserRequest;
+import com.BicycleShop.model.request.user.UserSearchRequest;
 import com.BicycleShop.model.response.IamResponse;
+import com.BicycleShop.model.response.PaginationResponse;
 import com.BicycleShop.repositories.ShoppingCartRepository;
 import com.BicycleShop.repositories.UserRepository;
+import com.BicycleShop.repositories.criteria.UserSearchCriteria;
 import com.BicycleShop.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -112,4 +120,50 @@ public class UserServiceImpl implements UserService {
 
         return IamResponse.createSuccessful(userDTO);
     }
+
+
+
+
+    @Override
+    public IamResponse<PaginationResponse<UserSearchDTO>> findAllUsers(Pageable pageable) {
+        Page<UserSearchDTO> users = userRepository.findAll(pageable)
+                .map(userMapper::toUserSearchDTO);
+
+        PaginationResponse<UserSearchDTO> response = new PaginationResponse<>(
+                users.getContent(),
+                new PaginationResponse.Pagination(
+                        pageable.getPageSize(),
+                        users.getTotalPages(),
+                        users.getNumber() + 1,
+                        users.getTotalElements()
+                )
+        );
+
+        return IamResponse.createSuccessful(response);
+    }
+
+    @Override
+    public IamResponse<PaginationResponse<UserSearchDTO>> searchUsers(
+            @NotNull UserSearchRequest request,
+            Pageable pageable) {
+
+        Specification<User> specification = new UserSearchCriteria(request);
+
+        Page<UserSearchDTO> users = userRepository.findAll(specification, pageable)
+                .map(userMapper::toUserSearchDTO);
+
+        PaginationResponse<UserSearchDTO> response = new PaginationResponse<>(
+                users.getContent(),
+                new PaginationResponse.Pagination(
+                        pageable.getPageSize(),
+                        users.getTotalPages(),
+                        users.getNumber() + 1,
+                        users.getTotalElements()
+                )
+        );
+
+        return IamResponse.createSuccessful(response);
+    }
+
+
 }
