@@ -17,6 +17,7 @@ public interface BicycleService {
     IamResponse<BicycleDTO> createBicycle(@NotNull NewBicycleRequest newBicycleRequest);
     IamResponse<BicycleDTO> updateBicycle(@NotNull Integer id, @NotNull UpdateBicycleRequest updateBicycleRequest);
     void softDeleteBicycle(@NotNull Integer id);
+
     IamResponse<PaginationResponse<BicycleSearchDTO>> findAllBicycles(Pageable pageable);
     IamResponse<PaginationResponse<BicycleSearchDTO>> searchBicycles(@NotNull BicycleSearchRequest request, Pageable pageable);
 }

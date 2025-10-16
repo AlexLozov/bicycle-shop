@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+
     @GetMapping("/full/{id}")
     public ResponseEntity<IamResponse<FullUserDTO>> getFullUserById(@PathVariable("id") Integer id) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
@@ -58,6 +59,17 @@ public class UserController {
 
         userService.softDeleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<IamResponse<UserDTO>> updateUserById(
+            @PathVariable(name = "id") Integer id,
+            @RequestBody @Valid NewUserRequest request){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<UserDTO> response = userService.updateUserById(id, request);
+        return ResponseEntity.ok(response);
     }
 
 }

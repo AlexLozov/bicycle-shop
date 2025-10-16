@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
 
         FullUserDTO fullUserDTO = userMapper.toFullDTO(user);
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public IamResponse<UserDTO> getUserById(@NotNull Integer id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
 
         UserDTO userDTO = userMapper.toDTO(user);
@@ -79,5 +79,37 @@ public class UserServiceImpl implements UserService {
 
         user.setDeleted(true);
         userRepository.save(user);
+    }
+
+
+
+    @Override
+    public IamResponse<UserDTO> updateUserById(Integer id, NewUserRequest newUserRequest) {
+        User user = userRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
+
+        if(newUserRequest.getEmail() != null && !newUserRequest.getEmail().isBlank()) {
+            if(userRepository.existsByEmailAndIdNot(newUserRequest.getEmail(), id)){
+                throw new DataExistException(ApiErrorMessage.USER_WITH_EMAIL_ALREADY_EXISTS.getMessage());
+            }
+            user.setEmail(newUserRequest.getEmail());
+        }
+
+        if(newUserRequest.getUsername() != null && !newUserRequest.getUsername().isBlank()) {
+            if(userRepository.existsByUsernameAndIdNot(newUserRequest.getUsername(), id)){
+                throw new DataExistException(ApiErrorMessage.USER_WITH_NAME_ALREADY_EXISTS.getMessage());
+            }
+            user.setUsername(newUserRequest.getUsername());
+        }
+
+        if(newUserRequest.getPassword() != null && !newUserRequest.getPassword().isEmpty()) {
+            user.setPassword(newUserRequest.getPassword());
+        }
+
+        UserDTO userDTO = userMapper.toDTO(user);
+        userRepository.save(user);
+
+
+        return IamResponse.createSuccessful(userDTO);
     }
 }
