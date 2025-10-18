@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
         ShoppingCart cart = new ShoppingCart();
         cart.setUser(user);
         user.setShoppingCart(cart);
+        user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
+
 
         userRepository.save(user);
 

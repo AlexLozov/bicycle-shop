@@ -28,6 +28,34 @@ CREATE TABLE users(
 
 --------------------------------------------------------------------
 
+CREATE TABLE roles(
+                    id SERIAL PRIMARY KEY ,
+                    name VARCHAR(50) NOT NULL,
+                    user_system_role VARCHAR(64) NOT NULL,
+                    active BOOLEAN NOT NULL DEFAULT true,
+                    created_by VARCHAR(50) NOT NULL
+);
+
+
+
+--------------------------------------------------------------------
+
+CREATE TABLE user_roles(
+                        user_id BIGINT NOT NULL,
+                        role_id INT NOT NULL,
+                        PRIMARY KEY (user_id, role_id),
+                        FOREIGN KEY (user_id) REFERENCES users(id),
+                        FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+
+
+
+
+--------------------------------------------------------------------
+
+
+
 
 -- Каждому пользователю — одна корзина.
 -- При удалении пользователя корзина удаляется автоматически.
@@ -76,9 +104,9 @@ VALUES
 
 INSERT INTO users(username, password, email, created, updated, registration_status, last_login, deleted)
 VALUES
-    ('fisrt', 'password1', 'first@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
-    ('two', 'password2', 'two@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
-    ('three', 'password3', 'three@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false);
+    ('super_admin', '$2a$10$BeT8Apw.Z12lbEyf0HX23eucpo6OUxCLKopvWrT9G3sJoa/ocD5bG', 'superadmin@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
+    ('admin', '$2a$10$BeT8Apw.Z12lbEyf0HX23eucpo6OUxCLKopvWrT9G3sJoa/ocD5bG', 'admin@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
+    ('user', '$2a$10$BeT8Apw.Z12lbEyf0HX23eucpo6OUxCLKopvWrT9G3sJoa/ocD5bG', 'user@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false);
 
 
 
@@ -105,3 +133,25 @@ VALUES
     (1, 1, 1),
     (2, 2, 1),
     (3, 3, 1);
+
+
+
+-------------------------------------------------------------------------
+
+INSERT INTO roles(name, user_system_role, created_by)
+VALUES
+    ('SUPER_ADMIN', 'SUPER_ADMIN', 'SUPER_ADMIN'),
+    ('ADMIN', 'ADMIN', 'SUPER_ADMIN'),
+    ('USER', 'USER', 'SUPER_ADMIN');
+
+
+INSERT INTO user_roles(user_id, role_id)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
+
+
+
+-------------------------------------------------------------------------
+
