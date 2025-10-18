@@ -1,4 +1,4 @@
-package com.BicycleShop.security;
+package com.BicycleShop.security.encrypt;
 
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

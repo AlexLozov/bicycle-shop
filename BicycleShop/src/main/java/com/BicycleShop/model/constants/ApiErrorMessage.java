@@ -17,7 +17,20 @@ public enum ApiErrorMessage {
     CART_WITH_USER_ID_NOT_FOUND("Cart with user ID: %s not found"),
 
     ROLE_WITH_NAME_NOT_FOUND("Role with name: '%s' not found"),
+//------------------------------------------------------------------------------------
+    INVALID_TOKEN_SIGNATURE("Invalid token signature"),
 
+    UNEXPECTED_ERROR("An unexpected error occurred. Please try again later."),
+
+
+    ERROR_DURING_JWT_PROCESSING("An unexpected error occurred during JWT processing"),
+    TOKEN_EXPIRED("Token expired."),
+    UNEXPECTED_ERROR_OCCURRED("An unexpected error occurred. Please try again later."),
+
+    AUTHENTICATION_FAILED_FOR_USER("Authentication failed for user: {}. "),
+    INVALID_USER_OR_PASSWORD("Invalid email or password. Try again"),
+    INVALID_USER_REGISTRATION_STATUS("Invalid user registration status: %s. "),
+    NOT_FOUND_REFRESH_TOKEN("Refresh token not found."),
     ;
 
     private String message;
