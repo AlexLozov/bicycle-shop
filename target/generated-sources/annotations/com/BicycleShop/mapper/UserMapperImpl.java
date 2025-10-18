@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-18T11:31:21+0300",
+    date = "2025-10-18T12:58:14+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -33,6 +33,7 @@ public class UserMapperImpl implements UserMapper {
         fullUserDTO.setRegistrationStatus( user.getRegistrationStatus() );
 
         fullUserDTO.setShoppingCart( mapShoppingCart(user.getShoppingCart()) );
+        fullUserDTO.setRoles( mapRoles(user.getRoles()) );
 
         return fullUserDTO;
     }
@@ -51,6 +52,8 @@ public class UserMapperImpl implements UserMapper {
         userDTO.setEmail( user.getEmail() );
         userDTO.setCreated( user.getCreated() );
         userDTO.setRegistrationStatus( user.getRegistrationStatus() );
+
+        userDTO.setRoles( mapRoles(user.getRoles()) );
 
         return userDTO;
     }
@@ -89,6 +92,8 @@ public class UserMapperImpl implements UserMapper {
         userSearchDTO.setLast_login( user.getLast_login() );
         userSearchDTO.setDeleted( user.getDeleted() );
         userSearchDTO.setRegistrationStatus( user.getRegistrationStatus() );
+
+        userSearchDTO.setRoles( mapRoles(user.getRoles()) );
 
         return userSearchDTO;
     }

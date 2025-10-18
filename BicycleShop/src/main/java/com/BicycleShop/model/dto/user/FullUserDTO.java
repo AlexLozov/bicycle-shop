@@ -1,5 +1,6 @@
 package com.BicycleShop.model.dto.user;
 
+import com.BicycleShop.model.dto.role.RoleDTO;
 import com.BicycleShop.model.dto.shopping_cart.ShoppingCartDTO;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +24,6 @@ public class FullUserDTO implements Serializable {
     private RegistrationStatus registrationStatus;
 
     private ShoppingCartDTO shoppingCart;
+    private List<RoleDTO> roles;
+
 }

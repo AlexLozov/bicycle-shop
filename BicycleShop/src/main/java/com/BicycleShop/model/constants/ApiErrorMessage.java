@@ -16,6 +16,8 @@ public enum ApiErrorMessage {
 
     CART_WITH_USER_ID_NOT_FOUND("Cart with user ID: %s not found"),
 
+    ROLE_WITH_NAME_NOT_FOUND("Role with name: '%s' not found"),
+
     ;
 
     private String message;

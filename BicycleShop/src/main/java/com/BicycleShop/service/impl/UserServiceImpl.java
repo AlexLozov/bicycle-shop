@@ -6,6 +6,7 @@ import com.BicycleShop.model.dto.bicycle.BicycleSearchDTO;
 import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
 import com.BicycleShop.model.dto.user.UserSearchDTO;
+import com.BicycleShop.model.entities.Role;
 import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.exception.DataExistException;
@@ -14,10 +15,12 @@ import com.BicycleShop.model.request.user.NewUserRequest;
 import com.BicycleShop.model.request.user.UserSearchRequest;
 import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.model.response.PaginationResponse;
+import com.BicycleShop.repositories.RoleRepository;
 import com.BicycleShop.repositories.ShoppingCartRepository;
 import com.BicycleShop.repositories.UserRepository;
 import com.BicycleShop.repositories.criteria.UserSearchCriteria;
 import com.BicycleShop.service.UserService;
+import com.BicycleShop.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
@@ -55,6 +61,7 @@ public class UserServiceImpl implements UserService {
             throw new DataExistException(ApiErrorMessage.USER_WITH_EMAIL_ALREADY_EXISTS.getMessage(newUserRequest.getEmail()));
         }
 
+
         User user = userMapper.createUser(newUserRequest);
         user.setLast_login(LocalDateTime.now());
 
@@ -63,6 +70,11 @@ public class UserServiceImpl implements UserService {
         user.setShoppingCart(cart);
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
 
+        Role role = roleRepository.findByName(IamServiceUserRole.USER.getRole())
+                        .orElseThrow(() -> new NotFoundException(ApiErrorMessage.ROLE_WITH_NAME_NOT_FOUND.getMessage(IamServiceUserRole.USER.getRole())));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
 
         userRepository.save(user);
 

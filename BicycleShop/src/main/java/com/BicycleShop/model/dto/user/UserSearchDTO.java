@@ -1,5 +1,6 @@
 package com.BicycleShop.model.dto.user;
 
+import com.BicycleShop.model.dto.role.RoleDTO;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,4 +25,6 @@ public class UserSearchDTO implements Serializable {
     private LocalDateTime last_login;
     private Boolean deleted;
     private RegistrationStatus registrationStatus;
+    private List<RoleDTO> roles;
+
 }
