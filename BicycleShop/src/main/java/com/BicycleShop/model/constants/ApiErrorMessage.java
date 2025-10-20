@@ -13,6 +13,7 @@ public enum ApiErrorMessage {
     USER_WITH_ID_NOT_FOUND("User with ID: %s not found"),
     USER_WITH_NAME_ALREADY_EXISTS("User with name: '%s' already exists"),
     USER_WITH_EMAIL_ALREADY_EXISTS("User with email: '%s' already exists"),
+    USER_WITH_EMAIL_NOT_FOUND("User with email: '%s' not found"),
 
     CART_WITH_USER_ID_NOT_FOUND("Cart with user ID: %s not found"),
 

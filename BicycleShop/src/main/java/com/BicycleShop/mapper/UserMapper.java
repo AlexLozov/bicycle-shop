@@ -5,6 +5,7 @@ import com.BicycleShop.model.dto.role.RoleDTO;
 import com.BicycleShop.model.dto.shopping_cart.ShoppingCartDTO;
 import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.dto.user.UserProfileDTO;
 import com.BicycleShop.model.dto.user.UserSearchDTO;
 import com.BicycleShop.model.entities.Role;
 import com.BicycleShop.model.entities.ShoppingCart;
@@ -78,5 +79,15 @@ public interface UserMapper {
                 .map(role -> new RoleDTO(role.getId(), role.getName()))
                 .toList();
     }
+
+//    @Mapping(target = "created")
+//    @Mapping(target = "updated")
+//    @Mapping(target = "deleted")
+//    @Mapping(target = "shoppingCart")
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "token", source = "token")
+    @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
+    UserProfileDTO toUserProfileDTO(User user, String token);
 
 }

@@ -11,8 +11,9 @@ import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.model.response.PaginationResponse;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id);
     IamResponse<UserDTO> createUser(@NotNull NewUserRequest newUserRequest);

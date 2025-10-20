@@ -16,5 +16,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     boolean existsByEmailAndIdNot(String email,Integer id);
     boolean existsByUsernameAndIdNot( String username, Integer id);
 
+    Optional<User> findUserByEmailAndDeletedFalse(String email);
+    Optional<User> findUserByEmail(String email);
+
 
 }
