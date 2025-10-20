@@ -17,7 +17,6 @@ public class LoginRequest implements Serializable {
 
     @Email
     @NotNull
-    @NotEmpty
     private String email;
 
     @NotBlank

@@ -2,6 +2,7 @@ package com.BicycleShop.mapper;
 
 import com.BicycleShop.model.dto.user.FullUserDTO;
 import com.BicycleShop.model.dto.user.UserDTO;
+import com.BicycleShop.model.dto.user.UserProfileDTO;
 import com.BicycleShop.model.dto.user.UserSearchDTO;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-18T12:58:14+0300",
+    date = "2025-10-20T18:25:42+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -96,5 +97,26 @@ public class UserMapperImpl implements UserMapper {
         userSearchDTO.setRoles( mapRoles(user.getRoles()) );
 
         return userSearchDTO;
+    }
+
+    @Override
+    public UserProfileDTO toUserProfileDTO(User user, String token) {
+        if ( user == null && token == null ) {
+            return null;
+        }
+
+        UserProfileDTO userProfileDTO = new UserProfileDTO();
+
+        if ( user != null ) {
+            userProfileDTO.setUsername( user.getUsername() );
+            userProfileDTO.setEmail( user.getEmail() );
+            userProfileDTO.setId( user.getId() );
+            userProfileDTO.setRegistrationStatus( user.getRegistrationStatus() );
+            userProfileDTO.setLast_login( user.getLast_login() );
+        }
+        userProfileDTO.setToken( token );
+        userProfileDTO.setRoles( mapRoles(user.getRoles()) );
+
+        return userProfileDTO;
     }
 }

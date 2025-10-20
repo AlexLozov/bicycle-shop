@@ -1,6 +1,10 @@
 package com.BicycleShop.utils;
 
 import com.BicycleShop.model.constants.ApiConstants;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.net.http.HttpHeaders;
 
 public class ApiUtils {
 
@@ -11,4 +15,15 @@ public class ApiUtils {
             return ApiConstants.UNDEFINED;
         }
     }
+
+    public static Cookie createAuthCookie(String value) {
+        Cookie authCookie = new Cookie("AuthToken", value);
+        authCookie.setHttpOnly(true);
+        authCookie.setSecure(true);
+        authCookie.setPath("/");
+        authCookie.setMaxAge(300);
+
+        return authCookie;
+    }
+
 }
