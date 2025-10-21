@@ -88,6 +88,7 @@ public interface UserMapper {
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "token", source = "token")
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
-    UserProfileDTO toUserProfileDTO(User user, String token);
+    @Mapping(target = "refreshToken", source = "refreshToken")
+    UserProfileDTO toUserProfileDTO(User user, String token, String refreshToken);
 
 }

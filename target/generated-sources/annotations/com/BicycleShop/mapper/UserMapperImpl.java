@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-20T18:25:42+0300",
+    date = "2025-10-21T12:50:35+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -100,8 +100,8 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public UserProfileDTO toUserProfileDTO(User user, String token) {
-        if ( user == null && token == null ) {
+    public UserProfileDTO toUserProfileDTO(User user, String token, String refreshToken) {
+        if ( user == null && token == null && refreshToken == null ) {
             return null;
         }
 
@@ -115,6 +115,7 @@ public class UserMapperImpl implements UserMapper {
             userProfileDTO.setLast_login( user.getLast_login() );
         }
         userProfileDTO.setToken( token );
+        userProfileDTO.setRefreshToken( refreshToken );
         userProfileDTO.setRoles( mapRoles(user.getRoles()) );
 
         return userProfileDTO;

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 public interface RefreshTokenService {
 
-    RefreshToken createOrUpdateRefreshToken(@NotNull User user);
+    RefreshToken generateOrUpdateRefreshToken(@NotNull User user);
+
+    RefreshToken validateOrUpdateRefreshToken(@NotNull String refreshToken);
 
 }
