@@ -86,6 +86,18 @@ CREATE TABLE cart_items (
 
 --------------------------------------------------------------------
 
+CREATE TABLE refresh_tokens(
+                            id SERIAL PRIMARY KEY,
+                            token VARCHAR(128) NOT NULL,
+                            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            user_id BIGINT NOT NULL,
+                            CONSTRAINT FK_refresh_tokens_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                            CONSTRAINT refresh_tokens_UNIQUE UNIQUE (user_id, id)
+);
+
+
+--------------------------------------------------------------------
+
 
 
 INSERT INTO bicycles (name, brand, type, price, stock, description, image_url)
