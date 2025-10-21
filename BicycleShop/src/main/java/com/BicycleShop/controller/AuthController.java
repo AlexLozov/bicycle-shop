@@ -33,6 +33,20 @@ public class AuthController {
         Cookie authCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
         response.addCookie(authCookie);
         return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/refresh/token")
+    public ResponseEntity<IamResponse<UserProfileDTO>> refreshToken(
+            @RequestParam(name="token") String refreshToken,
+            HttpServletResponse response){
+    log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+    IamResponse<UserProfileDTO> result = authService.refreshAccessToken(refreshToken);
+    Cookie authCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+    response.addCookie(authCookie);
+
+    return ResponseEntity.ok(result);
 
     }
 
