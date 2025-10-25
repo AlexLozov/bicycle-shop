@@ -3,8 +3,6 @@ package com.BicycleShop.service.impl;
 import com.BicycleShop.mapper.UserMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.entities.Role;
-import com.BicycleShop.model.exception.DataExistException;
-import com.BicycleShop.model.exception.InvalidPasswordException;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.user.LoginRequest;
 import com.BicycleShop.model.dto.user.UserProfileDTO;
@@ -16,10 +14,10 @@ import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.repositories.RoleRepository;
 import com.BicycleShop.repositories.UserRepository;
 import com.BicycleShop.security.JwtTokenProvider;
+import com.BicycleShop.security.validator.AccessValidator;
 import com.BicycleShop.service.AuthService;
 import com.BicycleShop.service.RefreshTokenService;
 import com.BicycleShop.service.model.IamServiceUserRole;
-import com.BicycleShop.utils.PasswordUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccessValidator accessValidator;
 
     @Override
     public IamResponse<UserProfileDTO> loginUser(@NotNull LoginRequest request) {
@@ -83,24 +82,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public IamResponse<UserProfileDTO> registerUser(@NotNull RegistrationUserRequest request) {
-        userRepository.findByUsername(request.getUsername()).ifPresent(existingUser -> {
-            throw new DataExistException(ApiErrorMessage.USER_WITH_NAME_ALREADY_EXISTS.getMessage(request.getUsername()));
-        });
-
-        userRepository.findUserByEmail(request.getEmail()).ifPresent(existingUser -> {
-            throw new DataExistException(ApiErrorMessage.USER_WITH_EMAIL_ALREADY_EXISTS.getMessage(request.getEmail()));
-        });
-
-        String password = request.getPassword();
-        String confirmPassword = request.getConfirmPassword();
-
-        if (!password.equals(confirmPassword)) {
-            throw new InvalidDataException(ApiErrorMessage.MISMATCH_PASSWORDS.getMessage());
-        }
-
-        if (PasswordUtils.isNotValidPassword(password)) {
-            throw new InvalidPasswordException(ApiErrorMessage.INVALID_PASSWORD.getMessage());
-        }
+        accessValidator.validateNewUser(
+                request.getUsername(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getConfirmPassword());
 
         Role userRole = roleRepository.findByName(IamServiceUserRole.USER.getRole())
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.ROLE_WITH_NAME_NOT_FOUND.getMessage(IamServiceUserRole.USER.getRole())));
