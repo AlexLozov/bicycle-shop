@@ -2,6 +2,7 @@ package com.BicycleShop.advice;
 
 import com.BicycleShop.model.constants.ApiConstants;
 import com.BicycleShop.model.exception.DataExistException;
+import com.BicycleShop.model.exception.InvalidPasswordException;
 import com.BicycleShop.model.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,6 +57,16 @@ public class CommonControllerAdvice {
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String handleInvalidPasswordException(InvalidPasswordException ex) {
+        return ex.getMessage();
+    }
+
+
 
     private void logStackTrace(Exception ex) {
         StringBuilder stackTrace = new StringBuilder();
