@@ -1,8 +1,9 @@
 package com.BicycleShop.controller;
 
 import com.BicycleShop.model.constants.ApiLogMessage;
-import com.BicycleShop.model.dto.user.LoginRequest;
+import com.BicycleShop.model.request.user.LoginRequest;
 import com.BicycleShop.model.dto.user.UserProfileDTO;
+import com.BicycleShop.model.request.user.RegistrationUserRequest;
 import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.service.AuthService;
 import com.BicycleShop.utils.ApiUtils;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,20 @@ public class AuthController {
     response.addCookie(authCookie);
 
     return ResponseEntity.ok(result);
+    }
 
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestBody @Valid RegistrationUserRequest request,
+            HttpServletResponse response){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<UserProfileDTO> result = authService.registerUser(request);
+        Cookie authCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+        response.addCookie(authCookie);
+
+        return ResponseEntity.ok(result);
     }
 
 }

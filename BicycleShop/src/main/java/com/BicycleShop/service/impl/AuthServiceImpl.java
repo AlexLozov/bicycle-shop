@@ -2,24 +2,33 @@ package com.BicycleShop.service.impl;
 
 import com.BicycleShop.mapper.UserMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
-import com.BicycleShop.model.dto.user.LoginRequest;
+import com.BicycleShop.model.entities.Role;
+import com.BicycleShop.model.exception.DataExistException;
+import com.BicycleShop.model.exception.NotFoundException;
+import com.BicycleShop.model.request.user.LoginRequest;
 import com.BicycleShop.model.dto.user.UserProfileDTO;
 import com.BicycleShop.model.entities.RefreshToken;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.exception.InvalidDataException;
-import com.BicycleShop.model.exception.NotFoundException;
+import com.BicycleShop.model.request.user.RegistrationUserRequest;
 import com.BicycleShop.model.response.IamResponse;
+import com.BicycleShop.repositories.RoleRepository;
 import com.BicycleShop.repositories.UserRepository;
 import com.BicycleShop.security.JwtTokenProvider;
 import com.BicycleShop.service.AuthService;
 import com.BicycleShop.service.RefreshTokenService;
+import com.BicycleShop.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -30,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public IamResponse<UserProfileDTO> loginUser(@NotNull LoginRequest request) {
@@ -64,5 +75,35 @@ public class AuthServiceImpl implements AuthService {
         return IamResponse.createSuccessfulWithNewToken(
                 userMapper.toUserProfileDTO(user, token ,refreshToken.getToken())
         );
+    }
+
+
+
+    @Override
+    public IamResponse<UserProfileDTO> registerUser(@NotNull RegistrationUserRequest request) {
+        userRepository.findByUsername(request.getUsername()).ifPresent(existingUser -> {
+            throw new DataExistException(ApiErrorMessage.USER_WITH_NAME_ALREADY_EXISTS.getMessage(request.getUsername()));
+        });
+
+        userRepository.findUserByEmail(request.getEmail()).ifPresent(existingUser -> {
+            throw new DataExistException(ApiErrorMessage.USER_WITH_EMAIL_ALREADY_EXISTS.getMessage(request.getEmail()));
+        });
+
+        Role userRole = roleRepository.findByName(IamServiceUserRole.USER.getRole())
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.ROLE_WITH_NAME_NOT_FOUND.getMessage(IamServiceUserRole.USER.getRole())));
+
+        User newUser = userMapper.fromDto(request);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+        newUser.setRoles(roles);
+        userRepository.save(newUser);
+
+        RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(newUser);
+        String token = jwtTokenProvider.generateToken(newUser);
+        UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(newUser, token, refreshToken.getToken());
+        userProfileDTO.setToken(token);
+
+        return IamResponse.createSuccessfulWithNewToken(userProfileDTO);
     }
 }

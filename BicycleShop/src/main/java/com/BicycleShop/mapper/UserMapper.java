@@ -12,6 +12,7 @@ import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import com.BicycleShop.model.request.user.NewUserRequest;
+import com.BicycleShop.model.request.user.RegistrationUserRequest;
 import com.BicycleShop.model.request.user.UserSearchRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -90,5 +91,10 @@ public interface UserMapper {
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     @Mapping(target = "refreshToken", source = "refreshToken")
     UserProfileDTO toUserProfileDTO(User user, String token, String refreshToken);
+
+    // - не верно @Mapping(target = "password", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "registrationStatus", expression = "java(RegistrationStatus.ACTIVE)")
+    User fromDto(RegistrationUserRequest request);
 
 }

@@ -7,12 +7,13 @@ import com.BicycleShop.model.dto.user.UserSearchDTO;
 import com.BicycleShop.model.entities.User;
 import com.BicycleShop.model.enums.RegistrationStatus;
 import com.BicycleShop.model.request.user.NewUserRequest;
+import com.BicycleShop.model.request.user.RegistrationUserRequest;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-21T12:50:35+0300",
+    date = "2025-10-25T17:26:01+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -119,5 +120,22 @@ public class UserMapperImpl implements UserMapper {
         userProfileDTO.setRoles( mapRoles(user.getRoles()) );
 
         return userProfileDTO;
+    }
+
+    @Override
+    public User fromDto(RegistrationUserRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        User user = new User();
+
+        user.setUsername( request.getUsername() );
+        user.setPassword( request.getPassword() );
+        user.setEmail( request.getEmail() );
+
+        user.setRegistrationStatus( RegistrationStatus.ACTIVE );
+
+        return user;
     }
 }
