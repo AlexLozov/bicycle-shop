@@ -14,8 +14,10 @@ public enum ApiErrorMessage {
     USER_WITH_NAME_ALREADY_EXISTS("User with name: '%s' already exists"),
     USER_WITH_EMAIL_ALREADY_EXISTS("User with email: '%s' already exists"),
     USER_WITH_EMAIL_NOT_FOUND("User with email: '%s' not found"),
+    USER_WITH_USERNAME_NOT_FOUND("User with username: '%s' not found"),
 
     CART_WITH_USER_ID_NOT_FOUND("Cart with user ID: %s not found"),
+    CART_WITH_ID_NOT_FOUND("Cart with ID: %s not found"),
 
     ROLE_WITH_NAME_NOT_FOUND("Role with name: '%s' not found"),
 //------------------------------------------------------------------------------------
@@ -40,6 +42,8 @@ public enum ApiErrorMessage {
             + ApiConstants.REQUIRED_MIN_LETTERS_NUMBER_EVERY_CASE_IN_PASSWORD + " letter(s) in upper and lower cases, "
             + ApiConstants.REQUIRED_MIN_CHARACTERS_NUMBER_IN_PASSWORD + " character(s), "
             + ApiConstants.REQUIRED_MIN_DIGITS_NUMBER_IN_PASSWORD + " digit(s). "),
+
+    HAVE_NOT_ACCESS("You don't have the necessary permission"),
 
 
     ;

@@ -15,7 +15,9 @@ import com.BicycleShop.repositories.BicycleRepository;
 import com.BicycleShop.repositories.CartItemRepository;
 import com.BicycleShop.repositories.ShoppingCartRepository;
 import com.BicycleShop.repositories.UserRepository;
+import com.BicycleShop.security.validator.AccessValidator;
 import com.BicycleShop.service.ShoppingCartService;
+import jakarta.persistence.Access;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,12 +30,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BicycleRepository bicycleRepository;
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final AccessValidator accessValidator;
 
     @Override
     public IamResponse<ShoppingCartDTO> addToCart(@NotNull AddToShoppingCart request) {
         // - проверка существует ли пользователь
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(request.getUserId())));
+
+        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
 
         // - проверка существует ли велосипед
         Bicycle bicycle = bicycleRepository.findByIdAndDeletedFalse(request.getBicycleId())
@@ -43,11 +48,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart cart = user.getShoppingCart();
         if(cart == null) {
             throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(user.getId()));
-//            cart = new ShoppingCart(); // - если нету, то создаем и присваиваем пользователю
-//            cart.setUser(user); // - привязываем текущего пользователя к корзине
-//            user.setShoppingCart(cart);  // - привязываем созданную корзину к текущему пользователю
-//            shoppingCartRepository.save(cart);// - сохраняем ее в базу данных
-//            userRepository.save(user); // - сохраняем измененного пользователя в базу данных
         }
 
         // - проверяем есть ли уже этот велик в корзине
@@ -82,6 +82,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
 
+        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
 
         ShoppingCart cart = user.getShoppingCart();
         // - проверка не нужна - но это для уверенности
@@ -104,6 +105,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void clearCartByUserId(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
+
+        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
 
         ShoppingCart cart = user.getShoppingCart();
         if(cart == null) throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(userId));

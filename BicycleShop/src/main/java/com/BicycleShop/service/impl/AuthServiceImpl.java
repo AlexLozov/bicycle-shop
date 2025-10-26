@@ -3,6 +3,7 @@ package com.BicycleShop.service.impl;
 import com.BicycleShop.mapper.UserMapper;
 import com.BicycleShop.model.constants.ApiErrorMessage;
 import com.BicycleShop.model.entities.Role;
+import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.user.LoginRequest;
 import com.BicycleShop.model.dto.user.UserProfileDTO;
@@ -96,6 +97,11 @@ public class AuthServiceImpl implements AuthService {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         newUser.setRoles(roles);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(newUser);
+        newUser.setShoppingCart(cart);
+
         userRepository.save(newUser);
 
         RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(newUser);
