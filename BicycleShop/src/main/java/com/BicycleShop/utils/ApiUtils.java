@@ -1,15 +1,20 @@
 package com.BicycleShop.utils;
 
 import com.BicycleShop.model.constants.ApiConstants;
+import com.BicycleShop.security.JwtTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
-import java.net.http.HttpHeaders;
 import java.util.UUID;
 
+@Component
+@RequiredArgsConstructor
 public class ApiUtils {
+    private final JwtTokenProvider jwtTokenProvider;
 
     public static String getMethodName() {
         try {
@@ -36,6 +41,11 @@ public class ApiUtils {
 
     public static String getCurrentUsername(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public Integer getUserIdFromAuthentication(){
+        String jwtToken = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        return Integer.parseInt(jwtTokenProvider.getUserId(jwtToken));
     }
 
 }

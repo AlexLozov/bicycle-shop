@@ -26,7 +26,7 @@ import java.util.Set;
 public class AccessValidator {
 
     private final UserRepository userRepository;
-    private final ShoppingCartRepository shoppingCartRepository;
+    private final ApiUtils apiUtils;
 
     public void validateNewUser(String username, String email, String password, String confirmPassword) {
         userRepository.findByUsername(username).ifPresent(existingUser -> {
@@ -48,9 +48,9 @@ public class AccessValidator {
     }
 
 
-    public boolean isAdminOrSuperAdmin(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_USERNAME_NOT_FOUND.getMessage(username)));
+    public boolean isAdminOrSuperAdmin(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
 
         return user.getRoles().stream()
                 .map(role -> IamServiceUserRole.fromName(role.getName()))
@@ -58,11 +58,11 @@ public class AccessValidator {
     }
 
     @SneakyThrows
-    public void validateAdminOrOwnerAccess(String ownerUsername) {
-        String currentUsername = ApiUtils.getCurrentUsername();
+    public void validateAdminOrOwnerAccess(Integer ownerUserId) {
+        Integer currentUserId = apiUtils.getUserIdFromAuthentication();
 
-        if(!currentUsername.equals(ownerUsername) &&
-                !isAdminOrSuperAdmin(currentUsername)) {
+        if(!currentUserId.equals(ownerUserId) &&
+                !isAdminOrSuperAdmin(currentUserId)) {
             throw new AccessDeniedException(ApiErrorMessage.HAVE_NOT_ACCESS.getMessage());
         }
     }

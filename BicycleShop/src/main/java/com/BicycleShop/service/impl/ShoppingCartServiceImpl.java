@@ -38,7 +38,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(request.getUserId())));
 
-        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
+        accessValidator.validateAdminOrOwnerAccess(user.getId());
 
         // - проверка существует ли велосипед
         Bicycle bicycle = bicycleRepository.findByIdAndDeletedFalse(request.getBicycleId())
@@ -82,7 +82,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
 
-        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
+        accessValidator.validateAdminOrOwnerAccess(user.getId());
 
         ShoppingCart cart = user.getShoppingCart();
         // - проверка не нужна - но это для уверенности
@@ -106,7 +106,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(userId)));
 
-        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
+        accessValidator.validateAdminOrOwnerAccess(user.getId());
 
         ShoppingCart cart = user.getShoppingCart();
         if(cart == null) throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(userId));

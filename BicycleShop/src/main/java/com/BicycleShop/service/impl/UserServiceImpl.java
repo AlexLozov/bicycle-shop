@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
 
-        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
+        accessValidator.validateAdminOrOwnerAccess(user.getId());
 
         if(newUserRequest.getEmail() != null && !newUserRequest.getEmail().isBlank()) {
             if(userRepository.existsByEmailAndIdNot(newUserRequest.getEmail(), id)){
