@@ -19,6 +19,7 @@ import com.BicycleShop.repositories.RoleRepository;
 import com.BicycleShop.repositories.ShoppingCartRepository;
 import com.BicycleShop.repositories.UserRepository;
 import com.BicycleShop.repositories.criteria.UserSearchCriteria;
+import com.BicycleShop.security.validator.AccessValidator;
 import com.BicycleShop.service.UserService;
 import com.BicycleShop.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final AccessValidator accessValidator;
 
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
@@ -115,6 +117,8 @@ public class UserServiceImpl implements UserService {
     public IamResponse<UserDTO> updateUserById(Integer id, NewUserRequest newUserRequest) {
         User user = userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
+
+        accessValidator.validateAdminOrOwnerAccess(user.getUsername());
 
         if(newUserRequest.getEmail() != null && !newUserRequest.getEmail().isBlank()) {
             if(userRepository.existsByEmailAndIdNot(newUserRequest.getEmail(), id)){

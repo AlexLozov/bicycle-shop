@@ -1,7 +1,9 @@
 package com.BicycleShop.config;
 
 import com.BicycleShop.security.filter.JwtRequestFilter;
+import com.BicycleShop.security.handler.AccessRestrictionHandler;
 import com.BicycleShop.service.UserService;
+import com.BicycleShop.service.model.IamServiceUserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +28,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+    private final AccessRestrictionHandler accessRestrictionHandler;
     private final JwtRequestFilter jwtRequestFilter;
 
     private static final String POST = "POST";
     private static final String GET = "GET";
+    private static final String PUT = "PUT";
+    private static final String DELETE = "DELETE";
 
     private static final AntPathRequestMatcher[] NOT_SECURED_URLS = new AntPathRequestMatcher[]{
             new AntPathRequestMatcher("/auth/login", POST),
@@ -45,10 +49,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
+
+                        .requestMatchers(get("/users/all")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(get("/users/full/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(post("/users/create")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(delete("/users/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
+
+                        .requestMatchers(get("/bicycle/all")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(post("/bicycle/create")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(put("/bicycle/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(delete("/bicycle/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
+
+
+
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                        .accessDeniedHandler(accessRestrictionHandler)
+
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -72,5 +91,28 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    private String[] adminAccessSecurityRoles(){
+        return new String[]{
+                IamServiceUserRole.ADMIN.name(),
+                IamServiceUserRole.SUPER_ADMIN.name()
+        };
+    }
+
+    private static AntPathRequestMatcher get(String pattern){
+        return new AntPathRequestMatcher(pattern, GET);
+    }
+
+    private static AntPathRequestMatcher post(String pattern){
+        return new AntPathRequestMatcher(pattern, POST);
+    }
+
+    private static AntPathRequestMatcher put(String pattern){
+        return new AntPathRequestMatcher(pattern, PUT);
+    }
+
+    private static AntPathRequestMatcher delete(String pattern){
+        return new AntPathRequestMatcher(pattern, DELETE);
     }
 }

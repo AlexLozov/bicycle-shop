@@ -14,7 +14,9 @@ import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.model.response.PaginationResponse;
 import com.BicycleShop.repositories.BicycleRepository;
 import com.BicycleShop.repositories.criteria.BicycleSearchCriteria;
+import com.BicycleShop.security.validator.AccessValidator;
 import com.BicycleShop.service.BicycleService;
+import com.BicycleShop.utils.ApiUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,6 @@ import java.time.LocalDateTime;
 public class BicycleServiceImpl implements BicycleService {
     private final BicycleRepository bicycleRepository;
     private final BicycleMapper bicycleMapper;
-    private final RestClient.Builder builder;
 
     @Override
     public IamResponse<BicycleDTO> getById(@NotNull Integer id) {
