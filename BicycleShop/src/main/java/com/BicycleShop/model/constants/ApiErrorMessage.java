@@ -9,6 +9,7 @@ import lombok.Getter;
 public enum ApiErrorMessage {
     BICYCLE_WITH_ID_NOT_FOUND("Bicycle with ID: %s not found"),
     BICYCLE_WITH_NAME_ALREADY_EXISTS("Bicycle with name: '%s' already exists"),
+    BICYCLE_STOCK_NOT_ENOUGH("Bicycle with stock: %d not enough"),
 
     USER_WITH_ID_NOT_FOUND("User with ID: %s not found"),
     USER_WITH_NAME_ALREADY_EXISTS("User with name: '%s' already exists"),

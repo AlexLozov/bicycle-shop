@@ -8,6 +8,7 @@ import com.BicycleShop.model.entities.Bicycle;
 import com.BicycleShop.model.entities.CartItem;
 import com.BicycleShop.model.entities.ShoppingCart;
 import com.BicycleShop.model.entities.User;
+import com.BicycleShop.model.exception.InvalidDataException;
 import com.BicycleShop.model.exception.NotFoundException;
 import com.BicycleShop.model.request.shopping_cart.AddToShoppingCart;
 import com.BicycleShop.model.response.IamResponse;
@@ -50,6 +51,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(user.getId()));
         }
 
+        if (bicycle.getStock() - request.getQuantity() <= 0) {
+            throw new InvalidDataException(ApiErrorMessage.BICYCLE_STOCK_NOT_ENOUGH.getMessage(request.getQuantity()));
+        }
+
         // - проверяем есть ли уже этот велик в корзине
         CartItem existingItem = cart.getItems().stream() // - получаем список великов
                 .filter(item -> item.getBicycle().getId().equals(request.getBicycleId())) // - сравниваем все айдишники великов с карзины с тем который ищем
@@ -88,12 +93,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         // - проверка не нужна - но это для уверенности
         if(cart == null) {
             throw new NotFoundException(ApiErrorMessage.CART_WITH_USER_ID_NOT_FOUND.getMessage(userId));
-            // - проверка не нужна так как пользователь сразу создается с корзиной
-//            cart = new ShoppingCart();
-//            cart.setUser(user);
-//            user.setShoppingCart(cart);
-//            shoppingCartRepository.save(cart);
-//            userRepository.save(user);
         }
 
         ShoppingCartDTO response = shoppingCartMapper.toShoppingCartDTO(cart);
