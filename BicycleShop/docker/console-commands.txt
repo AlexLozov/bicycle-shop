@@ -1,0 +1,16 @@
+// - путь к пом файлу
+cd "C:\Users\Alex\Desktop\УНИК\3 курс\1 семестр\pd\BicycleShop\BicycleShop"
+
+// - создать .jar файл
+mvn clean install -DskipTests=True
+
+// - создание докер образа
+docker build -f docker/Dockerfile -t bicycle-shop .
+
+// - проверка создался ли образ
+docker images
+
+// - запуск контейнера
+docker run -d --restart unless-stopped --name bicycle-shop -p 8189:8189 -e PROFILE=local-idea bicycle-shop
+// - 6900ef4b863ab7c9634fc8b3d030f6cc472fafa309200fae5e29f58ca2b9f8d0
+// - айди контейнера где запустился
