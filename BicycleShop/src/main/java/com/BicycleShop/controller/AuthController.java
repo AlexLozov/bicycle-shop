@@ -7,6 +7,7 @@ import com.BicycleShop.model.request.user.RegistrationUserRequest;
 import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.service.AuthService;
 import com.BicycleShop.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,6 +25,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Авторизация пользователя",
+            description = "Требуется ввести email и пароль, в ответе выдается его JWT-token и Refresh-token"
+    )
     public ResponseEntity<?> login(
             @RequestBody @Valid LoginRequest request,
             HttpServletResponse response) {
@@ -37,6 +42,10 @@ public class AuthController {
 
 
     @GetMapping("/refresh/token")
+    @Operation(
+            summary = "Refresh token",
+            description = "Требуется ввести refresh token пользователя, в ответе получаешь пользователя"
+    )
     public ResponseEntity<IamResponse<UserProfileDTO>> refreshToken(
             @RequestParam(name="token") String refreshToken,
             HttpServletResponse response){
@@ -51,6 +60,10 @@ public class AuthController {
 
 
     @PostMapping("/register")
+    @Operation(
+            summary = "Регистрация пользователя",
+            description = "Требуется ввести email, username, password, confirm-password, в ответе выдается пользователь со всеми данными и JWT-token с Refresh-token"
+    )
     public ResponseEntity<?> register(
             @RequestBody @Valid RegistrationUserRequest request,
             HttpServletResponse response){

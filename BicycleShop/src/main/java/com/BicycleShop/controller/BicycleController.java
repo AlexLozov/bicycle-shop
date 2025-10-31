@@ -10,6 +10,7 @@ import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.model.response.PaginationResponse;
 import com.BicycleShop.service.BicycleService;
 import com.BicycleShop.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,10 @@ public class BicycleController {
     private final BicycleService bicycleService;
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Просмотреть велосипед",
+            description = "просмотреть конкретный велосипед по его ID"
+    )
     public ResponseEntity<IamResponse<BicycleDTO>> getBicycleById(@PathVariable(name = "id") Integer id) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
@@ -37,6 +42,10 @@ public class BicycleController {
     }
 
     @PostMapping("/create")
+    @Operation(
+            summary = "Создание нового товара",
+            description = "Создание нового велосипеда со всеми характеристиками"
+    )
     public ResponseEntity<IamResponse<BicycleDTO>> createBicycle(
             @RequestBody @Valid NewBicycleRequest newBicycleRequest) {
 
@@ -47,6 +56,10 @@ public class BicycleController {
 
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Изменение товара",
+            description = "Изменить любые или все значения велосипеда по его ID"
+    )
     public ResponseEntity<IamResponse<BicycleDTO>> updateBicycle(
             @PathVariable(name="id") Integer id,
                     @RequestBody @Valid UpdateBicycleRequest request){
@@ -57,6 +70,10 @@ public class BicycleController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Удаление товара",
+            description = "Теневое удаление велосипеда"
+    )
     public ResponseEntity<Void> softDeleteBicycleById(
             @PathVariable(name = "id") Integer id) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
@@ -67,6 +84,10 @@ public class BicycleController {
     }
 
     @GetMapping("/all")
+    @Operation(
+            summary = "Список велосипедов",
+            description = "Получить список велосипедов с учетом пагинации"
+    )
     public ResponseEntity<IamResponse<PaginationResponse<BicycleSearchDTO>>> getAllBicycles(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "limit", defaultValue = "3") int limit
@@ -81,6 +102,10 @@ public class BicycleController {
 
 
     @PostMapping("/search")
+    @Operation(
+            summary = "Поиск велосипеда",
+            description = "Поиск велосипеда по фильтру ,ответ выдается с пагинацией"
+    )
     public ResponseEntity<IamResponse<PaginationResponse<BicycleSearchDTO>>> searchBicycles(
             @RequestBody @Valid BicycleSearchRequest request,
             @RequestParam(name = "page", defaultValue = "0") int page,

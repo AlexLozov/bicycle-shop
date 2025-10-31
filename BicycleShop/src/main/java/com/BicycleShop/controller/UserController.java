@@ -12,6 +12,7 @@ import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.model.response.PaginationResponse;
 import com.BicycleShop.service.UserService;
 import com.BicycleShop.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,10 @@ public class UserController {
 
 
     @GetMapping("/full/{id}")
+    @Operation(
+            summary = "Получить полного пользователя",
+            description = "Получение полного пользователя + корзина - не рекомендуется использовать"
+    )
     public ResponseEntity<IamResponse<FullUserDTO>> getFullUserById(@PathVariable("id") Integer id) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
@@ -40,6 +45,10 @@ public class UserController {
 
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Просмотреть пользователя",
+            description = "Просмотреть конкретного пользователя по его ID"
+    )
     public ResponseEntity<IamResponse<UserDTO>> getUserById(
             @PathVariable(name = "id") Integer id){
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
@@ -50,6 +59,10 @@ public class UserController {
 
 
     @PostMapping("/create")
+    @Operation(
+            summary = "Создание пользователя",
+            description = "Создание пользователя"
+    )
     public ResponseEntity<IamResponse<UserDTO>> createUser(
             @RequestBody @Valid NewUserRequest newUserRequest) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
@@ -60,6 +73,10 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Удаление пользователя",
+            description = "Теневое удаление пользователя"
+    )
     public ResponseEntity<Void> softDeleteUserById(
             @PathVariable(name = "id") Integer id){
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
@@ -70,6 +87,10 @@ public class UserController {
 
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Изменение пользователя",
+            description = "Частичное или полное изменение пользователя"
+    )
     public ResponseEntity<IamResponse<UserDTO>> updateUserById(
             @PathVariable(name = "id") Integer id,
             @RequestBody @Valid NewUserRequest request){
@@ -81,6 +102,10 @@ public class UserController {
 
 
     @GetMapping("/all")
+    @Operation(
+            summary = "Список пользователей",
+            description = "Список всех пользователей с учетом пагинации"
+    )
     public ResponseEntity<IamResponse<PaginationResponse<UserSearchDTO>>> getAllUsers(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "limit", defaultValue = "3") int limit) {
@@ -95,6 +120,10 @@ public class UserController {
 
 
     @PostMapping("/search")
+    @Operation(
+            summary = "Поиск пользователей",
+            description = "Поиск пользователей по фильтру ,ответ с пагинацией"
+    )
     public ResponseEntity<IamResponse<PaginationResponse<UserSearchDTO>>> searchUsers(
             @RequestBody @Valid UserSearchRequest request,
             @RequestParam(name = "page", defaultValue = "0") int page,

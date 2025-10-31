@@ -6,6 +6,7 @@ import com.BicycleShop.model.request.shopping_cart.AddToShoppingCart;
 import com.BicycleShop.model.response.IamResponse;
 import com.BicycleShop.service.ShoppingCartService;
 import com.BicycleShop.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,10 @@ public class CartController {
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping("/{userId}")
+    @Operation(
+            summary = "Получение корзины",
+            description = "Получение корзины конкретного пользователя по его ID"
+    )
     public ResponseEntity<IamResponse<ShoppingCartDTO>> getCartByUserId(
             @PathVariable(name = "userId") Integer userId){
 
@@ -34,6 +39,10 @@ public class CartController {
 
 
     @PostMapping("/add")
+    @Operation(
+            summary = "Добавление товара в корзину",
+            description = "Добавление товара в корзину конкретного пользователя"
+    )
     public ResponseEntity<IamResponse<ShoppingCartDTO>> addToCart(
             @Valid @RequestBody AddToShoppingCart request) {
 
@@ -45,6 +54,10 @@ public class CartController {
 
 
     @DeleteMapping("/{userId}")
+    @Operation(
+            summary = "Очистить корзину",
+            description = "очистка корзины конкретного пользователя по его ID"
+    )
     public ResponseEntity<Void> deleteCartByUserId(
             @PathVariable(name = "userId") Integer userId){
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
