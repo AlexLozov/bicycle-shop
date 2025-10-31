@@ -7,6 +7,6 @@ COPY docker/BicycleShop.sh .
 
 RUN chmod +x BicycleShop.sh
 
-EXPOSE 8189
+EXPOSE 8080
 
 ENTRYPOINT ["./BicycleShop.sh"]
