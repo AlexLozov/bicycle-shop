@@ -59,21 +59,21 @@ public class AuthController {
     }
 
 
-    @PostMapping("/register")
-    @Operation(
-            summary = "Регистрация пользователя",
-            description = "Требуется ввести email, username, password, confirm-password, в ответе выдается пользователь со всеми данными и JWT-token с Refresh-token"
-    )
-    public ResponseEntity<?> register(
-            @RequestBody @Valid RegistrationUserRequest request,
-            HttpServletResponse response){
-        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+        @PostMapping("/register")
+        @Operation(
+                summary = "Регистрация пользователя",
+                description = "Требуется ввести email, username, password, confirm-password, в ответе выдается пользователь со всеми данными и JWT-token с Refresh-token"
+        )
+        public ResponseEntity<?> register(
+                @RequestBody @Valid RegistrationUserRequest request,
+                HttpServletResponse response){
+            log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
-        IamResponse<UserProfileDTO> result = authService.registerUser(request);
-        Cookie authCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
-        response.addCookie(authCookie);
+            IamResponse<UserProfileDTO> result = authService.registerUser(request);
+            Cookie authCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+            response.addCookie(authCookie);
 
-        return ResponseEntity.ok(result);
-    }
+            return ResponseEntity.ok(result);
+        }
 
 }

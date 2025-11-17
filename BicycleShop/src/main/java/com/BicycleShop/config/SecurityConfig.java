@@ -23,6 +23,14 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+// 🔹 Добавлено для CORS
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.Customizer;
+
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -50,7 +58,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // ✅ Включаем CORS
+                .cors(Customizer.withDefaults())
+
+                // Отключаем CSRF (JWT не использует его)
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
@@ -60,19 +73,16 @@ public class SecurityConfig {
                         .requestMatchers(post("/users/create")).hasAnyAuthority(adminAccessSecurityRoles())
                         .requestMatchers(delete("/users/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
 
-                        .requestMatchers(get("/bicycle/all")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(get("/bicycle/all")).permitAll()
                         .requestMatchers(post("/bicycle/create")).hasAnyAuthority(adminAccessSecurityRoles())
                         .requestMatchers(put("/bicycle/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
                         .requestMatchers(delete("/bicycle/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
-
-
 
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                         .accessDeniedHandler(accessRestrictionHandler)
-
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -80,10 +90,33 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost",
+                "http://127.0.0.1",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://localhost:8080",  // если тестируешь на этом же порту
+                "file://",                // важно, если открываешь html как file://
+                "http://localhost:5500"
+        ));
+
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {

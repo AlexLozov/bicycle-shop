@@ -29,7 +29,8 @@ public class ApiUtils {
         authCookie.setHttpOnly(true);
         authCookie.setSecure(true);
         authCookie.setPath("/");
-        authCookie.setMaxAge(300);
+        authCookie.setMaxAge(86400);
+        authCookie.setAttribute("SameSite", "None");
 
         return authCookie;
     }
